@@ -8,7 +8,10 @@ urlpatterns = [
     path('category/', views.categoryList),
     path('sub-category/', views.subCategoryList),
     path('image/', views.imageList),
+    path('product-type/', views.productTypeList),
 
     path('color/', views.colorList),
+
+    # admin
 
 ]

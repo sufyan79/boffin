@@ -1,15 +1,14 @@
 from rest_framework import serializers
-from .models import Product, Niche, Category, SubCategory, ProductImage, ProductColor
+from .models import Product, Niche, Category, SubCategory, ColorItem, ProductImage, ProductType
 
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'product_name', 'product_description', 'product_discount_price',
-                  'product_price', 'product_capacity', 'product_compatibility', 'product_type',
+                  'product_price', 'product_affiliate_link', 'product_blog', 'product_uses_detail', 'product_cons', 'product_props', 'product_capacity', 'product_compatibility', 'type',
                   'product_speed', 'product_created_at',
-                  'image', 'category', 'color']
-
+                  'category']
     # calculate = serializers.SerializerMethodField(method_name='calculatee')
 
     # def calculatee(self, product: Product):
@@ -31,16 +30,29 @@ class CategorySerializer(serializers.ModelSerializer):
 class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
-        fields = ['id', 'subcategory_title', 'category']
+        fields = ['id', 'subcategory_title',
+                  'subcategory_description', 'category']
+
+
+class ProductTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductType
+        fields = ['id', 'product_type_name', 'sub_category']
 
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        fields = ['id', 'image_url']
+        fields = ['id', 'product', 'full_image_url']
+
+    full_image_url = serializers.SerializerMethodField(
+        method_name='get_image_url')
+
+    def get_image_url(self, product_img: ProductImage):
+        return "http://127.0.0.1:8000/media/" + str(product_img.image_url)
 
 
 class ColorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProductColor
-        fields = ['id', 'color_name']
+        model = ColorItem
+        fields = ['id', 'product', 'color', 'color_image_url']

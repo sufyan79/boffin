@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Product, Niche, Category, SubCategory, ProductImage, ProductColor
-from .serializers import ProductSerializer, NicheSerializer, CategorySerializer, SubCategorySerializer, ImageSerializer, ColorSerializer
+from .models import Product, Niche, Category, SubCategory, ProductImage, ColorItem, ProductType
+from .serializers import ProductSerializer, NicheSerializer, CategorySerializer, SubCategorySerializer, ImageSerializer, ProductTypeSerializer, ColorSerializer
 # Create your views here.
 
 
@@ -46,6 +46,13 @@ def subCategoryList(request):
 
 
 @api_view()
+def productTypeList(request):
+    product_type_list = ProductType.objects.all()
+    serializer = ProductTypeSerializer(product_type_list, many=True)
+    return Response(serializer.data)
+
+
+@api_view()
 def imageList(request):
     image_list = ProductImage.objects.all()
     serializer = ImageSerializer(image_list, many=True)
@@ -54,6 +61,6 @@ def imageList(request):
 
 @api_view()
 def colorList(request):
-    color_list = ProductColor.objects.all()
+    color_list = ColorItem.objects.all()
     serializer = ColorSerializer(color_list, many=True)
     return Response(serializer.data)
