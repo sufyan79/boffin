@@ -9,12 +9,28 @@ from . import models
 
 @admin.register(models.Niche)
 class NichiAdmin(admin.ModelAdmin):
-    list_display = ['id', 'niche_title']
+    list_display = ['id', 'niche_title', 'category_count']
+
+    def category_count(self, niche: models.Niche):
+        return niche.category_count
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(
+            category_count=Count('category')
+        )
 
 
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'category_title']
+    list_display = ['id', 'category_title', 'sub_category_count']
+
+    def sub_category_count(self, category: models.Category):
+        return category.sub_category_count
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(
+            sub_category_count=Count('subcategory')
+        )
 
 
 @admin.register(models.SubCategory)
@@ -51,16 +67,31 @@ class ColorItem(admin.TabularInline):
     extra = 1
 
 
+class VideoItem(admin.TabularInline):
+    model = models.ProductVideo
+    extra = 1
+
+
+class ProductReview(admin.TabularInline):
+    model = models.ProductReview
+    extra = 1
+
+
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['product_name', 'product_price', 'subcategory_title']
     list_select_related = ['category']
     list_filter = ['category', 'product_created_at']
     search_fields = ['product_name']
-    inlines = [ImageItem, ColorItem]
+    inlines = [ImageItem, ColorItem, VideoItem, ProductReview]
 
     def subcategory_title(self, product: models.Product):
         return product.category.subcategory_title
+
+    class Media:
+        css = {
+            'all': ['store/style.css']
+        }
 
 
 @admin.register(models.ProductColor)

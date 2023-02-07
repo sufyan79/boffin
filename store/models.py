@@ -41,17 +41,18 @@ class ProductType(models.Model):
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
     product_brand = models.CharField(max_length=100)
+    product_form = models.CharField(max_length=255, null=True, blank=True)
     product_price = models.DecimalField(
         max_digits=6, decimal_places=2, validators=[MinValueValidator(decimal.Decimal('0.01'))])
     product_discount_price = models.DecimalField(
         max_digits=6, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(decimal.Decimal('0.01'))])
 
     product_rating = models.PositiveIntegerField(null=True, blank=True)
-    product_reviews = models.TextField(null=True, blank=True)
-    product_affiliate_link = models.URLField()
-    product_description = models.TextField(max_length=255)
+    product_link = models.URLField()
+    product_description = models.TextField()
 
     category = models.ForeignKey(SubCategory, on_delete=models.PROTECT)
+
     type = models.ForeignKey(
         ProductType, on_delete=models.PROTECT, null=True, blank=True)
 
@@ -70,6 +71,16 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['product_name']
+
+
+class ProductVideo(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    video_url = models.FileField(upload_to='videos/')
+
+
+class ProductReview(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_review = models.TextField()
 
 
 class ProductImage(models.Model):
