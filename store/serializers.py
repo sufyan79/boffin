@@ -2,13 +2,27 @@ from rest_framework import serializers
 from .models import Product, Niche, Category, SubCategory, ColorItem, ProductImage, ProductType, ProductVideo, ProductReview
 
 
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductVideo
+        fields = ['id', 'product', 'full_video_url']
+
+    full_video_url = serializers.SerializerMethodField(
+        method_name='get_video_url')
+
+    def get_video_url(self, product_video: ProductVideo):
+        return "http://127.0.0.1:8000/media/" + str(product_video.video_url)
+
+
 class ProductSerializer(serializers.ModelSerializer):
+    videos = VideoSerializer(many=True, read_only=True)
+
     class Meta:
         model = Product
         fields = ['id', 'product_name', 'product_description', 'product_discount_price',
                   'product_price', 'product_link', 'product_blog', 'product_uses_detail', 'product_cons', 'product_props', 'product_capacity', 'product_compatibility', 'type',
                   'product_speed', 'product_created_at',
-                  'category']
+                  'category', 'videos']
     # calculate = serializers.SerializerMethodField(method_name='calculatee')
 
     # def calculatee(self, product: Product):
@@ -55,18 +69,6 @@ class ImageSerializer(serializers.ModelSerializer):
 
     def get_image_url(self, product_img: ProductImage):
         return "http://127.0.0.1:8000/media/" + str(product_img.image_url)
-
-
-class VideoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductVideo
-        fields = ['id', 'product', 'full_video_url']
-
-    full_video_url = serializers.SerializerMethodField(
-        method_name='get_video_url')
-
-    def get_video_url(self, product_video: ProductVideo):
-        return "http://127.0.0.1:8000/media/" + str(product_video.video_url)
 
 
 class ColorSerializer(serializers.ModelSerializer):

@@ -11,7 +11,8 @@ urlpatterns = [
     path('video/', views.videoList),
 
     path('product-type/', views.productTypeList),
-    path('product-review', views.productReview),
+
+    path('product-reviews/', views.productReview),
     path('color/', views.colorList),
 
     # admin
