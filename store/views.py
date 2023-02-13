@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import logging
 
-from .models import Product, ProductReview, Niche, Category, SubCategory, ProductImage, ColorItem, ProductType, ProductVideo
-from .serializers import ProductReviewSerializer, ProductSerializer, NicheSerializer, CategorySerializer, SubCategorySerializer, VideoSerializer, ImageSerializer, ProductTypeSerializer, ColorSerializer
+from .models import Product, ProductDescription, ProductListText, ProductReview, Niche, ProductSize, ProductBrand, Category, SubCategory, ProductImage, ColorItem, ProductType, ProductVideo
+from .serializers import ProductReviewSerializer, ProductDescriptionSerializer, ProductTextListSerializer, ProductBrandSerializer, ProductSizeSerializer, ProductSerializer, NicheSerializer, CategorySerializer, SubCategorySerializer, VideoSerializer, ImageSerializer, ProductTypeSerializer, ColorSerializer
 # Create your views here.
 
 logger = logging.getLogger(__name__)
@@ -35,6 +35,20 @@ def productReview(request):
 
 
 @api_view()
+def productSize(request):
+    product_size = ProductSize.objects.all()
+    serializer = ProductSizeSerializer(product_size, many=True)
+    return Response(serializer.data)
+
+
+@api_view()
+def productBrand(request):
+    product_brand = ProductBrand.objects.all()
+    serializer = ProductBrandSerializer(product_brand, many=True)
+    return Response(serializer.data)
+
+
+@api_view()
 def nicheList(request):
     niche_list = Niche.objects.all()
     serializer = NicheSerializer(niche_list, many=True)
@@ -59,6 +73,20 @@ def subCategoryList(request):
 def productTypeList(request):
     product_type_list = ProductType.objects.all()
     serializer = ProductTypeSerializer(product_type_list, many=True)
+    return Response(serializer.data)
+
+
+@api_view()
+def productDescriptionList(request):
+    product_type_list = ProductDescription.objects.all()
+    serializer = ProductDescriptionSerializer(product_type_list, many=True)
+    return Response(serializer.data)
+
+
+@api_view()
+def productListText(request):
+    product_type_list = ProductListText.objects.all()
+    serializer = ProductTextListSerializer(product_type_list, many=True)
     return Response(serializer.data)
 
 

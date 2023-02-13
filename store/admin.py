@@ -57,6 +57,11 @@ class ProductTypeAdmin(admin.ModelAdmin):
     list_display = ['id', 'product_type_name', 'sub_category']
 
 
+@admin.register(models.ProductBrand)
+class ProductBrand(admin.ModelAdmin):
+    list_display = ['id', 'brand_name']
+
+
 class ImageItem(admin.TabularInline):
     model = models.ProductImage
     extra = 1
@@ -77,13 +82,34 @@ class ProductReview(admin.TabularInline):
     extra = 1
 
 
+class ProductSize(admin.TabularInline):
+    model = models.ProductSize
+    extra = 1
+
+
+class ProductDescription(admin.TabularInline):
+    model = models.ProductDescription
+    extra = 1
+
+
+class ProductListText(admin.TabularInline):
+    model = models.ProductListText
+    extra = 1
+
+
+class ProductQuestion(admin.TabularInline):
+    model = models.ProductQuestions
+    extra = 1
+
+
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['product_name', 'product_price', 'subcategory_title']
     list_select_related = ['category']
     list_filter = ['category', 'product_created_at']
     search_fields = ['product_name']
-    inlines = [ImageItem, ColorItem, VideoItem, ProductReview]
+    inlines = [ProductDescription, ProductListText, ProductQuestion, ImageItem,
+               ColorItem, VideoItem, ProductReview, ProductSize]
 
     def subcategory_title(self, product: models.Product):
         return product.category.subcategory_title
